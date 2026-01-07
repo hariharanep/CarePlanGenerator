@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care Plan Generator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Care Plan Generator</h1>
+        <p class="subtitle">Automated pharmaceutical care plan generation</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalPatients">0</div>
+                <div class="stat-label">Unique Patients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalProviders">0</div>
+                <div class="stat-label">Providers</div>
+            </div>
+        </div>
+        
+        <div class="alert error" id="errorAlert">
+            <div class="alert-title">Errors</div>
+            <ul id="errorList"></ul>
+        </div>
+
+        <div class="alert warning" id="warningAlert">
+            <div class="alert-title">Warnings</div>
+            <ul id="warningList"></ul>
+        </div>
+        
+        <div class="alert success" id="successAlert">
+            <div class="alert-title">Success</div>
+            <div id="successMessage"></div>
+        </div>
+        
+        <form id="carePlanForm">
+            <div class="form-section">
+                <h2 class="section-title">Patient Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name <span class="required">*</span></label>
+                        <input type="text" id="patientFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name <span class="required">*</span></label>
+                        <input type="text" id="patientLastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>MRN <span class="required">*</span></label>
+                        <input type="text" id="patientMRN" pattern="[0-9]{6}" maxlength="6" required>
+                        <div class="helper-text">6-digit patient identifier</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">Provider Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Provider Name <span class="required">*</span></label>
+                        <input type="text" id="providerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Provider NPI <span class="required">*</span></label>
+                        <input type="text" id="providerNPI" pattern="\d{10}" maxlength="10" required>
+                        <div class="helper-text">10-digit National Provider Identifier</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-title">Clinical Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Primary Diagnosis (ICD-10) <span class="required">*</span></label>
+                        <input type="text" id="primaryDiagnosis" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Medication <span class="required">*</span></label>
+                        <input type="text" id="medication" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>Additional Diagnoses (ICD-10)</label>
+                        <input type="text" id="additionalDiagnoses">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>Medication History</label>
+                        <textarea id="medicationHistory" placeholder="Enter medication history, comma-separated"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>Patient Clinical Records</label>
+                        <textarea id="patientRecords" rows="10" placeholder="Paste patient clinical records here"></textarea>
+                        <div class="helper-text">Include vitals, exam findings, labs, clinical notes, etc.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="validateBtn">Validate</button>
+                <button type="submit" class="btn-primary" id="generateBtn">Generate Care Plan</button>
+                <button type="button" class="btn-success" id="exportBtn">Export All Orders</button>
+            </div>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div id="loadingMessage">Processing...</div>
+        </div>
+        
+        <div class="care-plan-output" id="carePlanOutput">
+            <h2 class="section-title">Generated Care Plan</h2>
+            <div class="care-plan-content" id="carePlanContent"></div>
+            <div class="button-group">
+                <button type="button" class="btn-primary" id="downloadButton">Download Care Plan</button>
+                <button type="button" class="btn-secondary" id="resetBtn">Create Another</button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
