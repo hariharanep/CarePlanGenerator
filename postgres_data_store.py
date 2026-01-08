@@ -2,14 +2,12 @@ from typing import List, Dict
 import psycopg
 from psycopg.rows import dict_row
 import os
+from data_store import DataStore
 
-
-class PostgreSQLDataStore:
-    CONFLICT_KEY = "conflict"
-    ERROR_MESSAGE_KEY = "message"
+class PostgreSQLDataStore(DataStore):
 
     def __init__(self, database_url: str = None):
-        self.database_url = database_url or os.environ.get('DATABASE_URL')
+        self.database_url = database_url
         if not self.database_url:
             raise ValueError("Database URL hasn't been provided.")
         self._init_schema()

@@ -7,13 +7,20 @@ from in_memory_data_store import InMemoryDataStore
 from postgres_data_store import PostgreSQLDataStore
 from care_plan_generator import CarePlanGenerator
 from csv_generator import CSVGenerator
+from data_store import DataStore
 
 load_dotenv()
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 input_handler = InputHandler()
-#store = InMemoryDataStore() # use this if testing locally and postgresql isn't available
-store = PostgreSQLDataStore() # use this if postgresql is available
+
+def create_store() -> DataStore:
+    database_url = os.environ.get('DATABASE_URL')
+    if os.environ.get('DATABASE_URL'):
+        return PostgreSQLDataStore(database_url)
+    return InMemoryDataStore()
+
+store = create_store()
 
 @app.route('/')
 def index():

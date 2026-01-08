@@ -1,10 +1,8 @@
 from typing import List, Dict
 from datetime import datetime
+from data_store import DataStore
 
-class InMemoryDataStore:
-    CONFLICT_KEY = "conflict"
-    ERROR_MESSAGE_KEY = "message"
-
+class InMemoryDataStore(DataStore):
     def __init__(self):
         self.providers = {}  # NPI -> Provider
         self.provider_names = {}  # Normalized provider name -> NPI
