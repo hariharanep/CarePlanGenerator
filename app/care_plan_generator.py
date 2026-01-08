@@ -6,7 +6,7 @@ from typing import Dict
 class CarePlanGenerator:
 
     MODEL_NAME = "claude-sonnet-4-5-20250929"
-    MAX_TOKENS_LIMIT = 4000
+    MAX_TOKENS_LIMIT = 4500
 
     def __init__(self):
         # Initialize anthropic client

@@ -87,25 +87,52 @@ Monitoring plan & lab schedule (example)
 </example>
 """
 
-
 def generate_prompt(data: Dict) -> str:
     task_prompt = f"""
-Now create a similar comprehensive care plan for this patient:
-Patient Information:
+Using the example above as a reference for STRUCTURE and QUALITY ONLY,
+generate a care plan for the patient below.
+
+IMPORTANT CONSTRAINTS:
+- Do NOT invent or assume any clinical information.
+- Use ONLY the information explicitly provided in the patient data.
+- If a required detail is missing, write "Not provided".
+- Keep responses concise and clinically precise.
+- Use bullet points only (no narrative paragraphs).
+- Each bullet should be no more than 1–3 lines.
+
+PATIENT DATA:
 - Name: {data['patient_first_name']} {data['patient_last_name']}
 - MRN: {data['patient_mrn']}
-- Primary Diagnosis: {data['primary_diagnosis']}
+- Primary diagnosis: {data['primary_diagnosis']}
 - Medication: {data['medication']}
-- Additional Diagnoses: {data['additional_diagnoses']}
-- Medication History: {data["medication_history"]}
+- Additional diagnoses: {data['additional_diagnoses']}
+- Medication history: {data['medication_history']}
+- Clinical records: {data['patient_records']}
 
-Patient Clinical Records: {data['patient_records']}
+REQUIRED OUTPUT SECTIONS  
+(ALL sections below must be present, even if information is limited):
 
-Generate a care plan with the same level of clinical detail, following this structure:
-1. Problem list / Drug therapy problems (DTPs) - list 4-6 specific issues
-2. Goals (SMART) - include primary goal, safety goal, and process goal
-3. Pharmacist interventions / plan - detailed sections on dosing, monitoring, patient education, etc.
-4. Monitoring plan & lab schedule - specific timing and parameters
+1. Problem list / Drug therapy problems (DTPs)  
+   - List 4–6 specific, clinically relevant problems.
 
-Write in a professional clinical tone with specific details, avoid generic statements."""
+2. Goals (SMART)  
+   - Primary goal  
+   - Safety goal  
+   - Process goal  
+
+3. Pharmacist interventions / plan  
+   - Dosing & Administration  
+   - Monitoring
+   - Adverse event mitigation
+   - Patient education  
+   - Documentation & communication  
+
+4. Monitoring plan & lab schedule  
+   - Baseline  
+   - During therapy  
+   - Post-therapy  
+
+Do not add extra sections.
+Do not include fictional dates, labs, vitals, products, or dosing details.
+"""
     return ONE_SHOT_EXAMPLE + task_prompt
