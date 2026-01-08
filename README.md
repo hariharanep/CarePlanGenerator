@@ -23,7 +23,7 @@ export FLASK_ENV=development
 export PORT=8000
 
 # 5. Run the application
-python app.py
+python server.py
 
 # 6. Open in browser
 open http://localhost:8000
@@ -103,3 +103,28 @@ Click "Export All Orders" to download a CSV file containing:
 - Provider information
 - Diagnoses and medications
 - Care plan text
+
+## Testing
+
+### Running Tests
+
+The project includes a comprehensive test suite with unit tests for all critical business logic components.
+
+#### Run All Tests
+```bash
+pytest
+```
+
+#### Run Tests with Verbose Output
+```bash
+pytest -v
+```
+
+#### Run Specific Test File
+```bash
+pytest test/test_care_plan_generator.py
+pytest test/test_csv_generator.py
+pytest test/test_in_memory_data_store.py
+pytest test/test_input_validations.py
+pytest test/test_postgres_data_store.py
+```

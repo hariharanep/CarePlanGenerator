@@ -1,6 +1,6 @@
 import os
 from anthropic import Anthropic
-from prompt import generate_prompt
+from app.prompt import generate_prompt
 from typing import Dict
 
 class CarePlanGenerator:

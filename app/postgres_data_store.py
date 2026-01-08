@@ -1,8 +1,7 @@
 from typing import List, Dict
 import psycopg
 from psycopg.rows import dict_row
-import os
-from data_store import DataStore
+from app.data_store import DataStore
 
 class PostgreSQLDataStore(DataStore):
 

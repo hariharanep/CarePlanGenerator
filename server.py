@@ -2,12 +2,12 @@ from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 import os
 from typing import Dict
-from input_validations import InputHandler
-from in_memory_data_store import InMemoryDataStore
-from postgres_data_store import PostgreSQLDataStore
-from care_plan_generator import CarePlanGenerator
-from csv_generator import CSVGenerator
-from data_store import DataStore
+from app.input_validations import InputHandler
+from app.in_memory_data_store import InMemoryDataStore
+from app.postgres_data_store import PostgreSQLDataStore
+from app.care_plan_generator import CarePlanGenerator
+from app.csv_generator import CSVGenerator
+from app.data_store import DataStore
 
 load_dotenv()
 app = Flask(__name__)

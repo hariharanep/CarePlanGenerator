@@ -1,4 +1,4 @@
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 import re
 
 class InputHandler:
@@ -92,21 +92,21 @@ class InputHandler:
         return errors
 
     @staticmethod
-    def validate_npi(npi: str, field_name: str) -> tuple[bool, Optional[str]]:
+    def validate_npi(npi: str, field_name: str) -> Tuple[bool, Optional[str]]:
         """Validate NPI is exactly 10 digits."""
         if not re.match(r'^\d{10}$', npi):
             return False, f"{field_name} must be exactly 10 digits"
         return True, None
 
     @staticmethod
-    def validate_mrn(mrn: str, field_name: str) -> tuple[bool, Optional[str]]:
+    def validate_mrn(mrn: str, field_name: str) -> Tuple[bool, Optional[str]]:
         """Validate MRN is exactly 6 digits."""
         if not re.match(r'^\d{6}$', mrn):
             return False, f"{field_name} must be exactly 6 digits"
         return True, None
 
     @staticmethod
-    def validate_required_string(value: str, field_name: str) -> tuple[bool, Optional[str]]:
+    def validate_required_string(value: str, field_name: str) -> Tuple[bool, Optional[str]]:
         """Validate required string field."""
         if not value or not value.strip():
             return False, f"{field_name} is required"

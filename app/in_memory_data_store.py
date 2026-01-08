@@ -1,6 +1,6 @@
 from typing import List, Dict
 from datetime import datetime
-from data_store import DataStore
+from app.data_store import DataStore
 
 class InMemoryDataStore(DataStore):
     def __init__(self):
