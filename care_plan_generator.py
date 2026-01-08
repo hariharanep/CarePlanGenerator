@@ -12,7 +12,7 @@ class CarePlanGenerator:
         # Initialize anthropic client
         api_key = os.environ.get('ANTHROPIC_API_KEY')
         if not api_key:
-            raise RuntimeError("API Key hasn't been provided")
+            raise ValueError("API Key hasn't been provided")
         self.client = Anthropic(api_key=api_key)
     
     def generate_care_plan_with_llm(self, data: Dict) -> str:
@@ -23,8 +23,8 @@ class CarePlanGenerator:
 
             # Invoke claude-sonnet-4-5-20250929 LLM with prompt
             message = self.client.messages.create(
-                model=CarePlanGenerator.MODEL_NAME,
-                max_tokens=CarePlanGenerator.MAX_TOKENS_LIMIT,
+                model=self.MODEL_NAME,
+                max_tokens=self.MAX_TOKENS_LIMIT,
                 messages=[
                     {"role": "user", "content": prompt}
                 ]

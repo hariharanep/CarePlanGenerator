@@ -16,8 +16,8 @@ class InMemoryDataStore:
 
         # Check for duplicate provider with different name or different npi
         provider_check = self.validate_provider(data['provider_npi'], data['provider_name'])
-        if provider_check.get(InMemoryDataStore.CONFLICT_KEY, False):
-            warnings.append(provider_check.get(InMemoryDataStore.ERROR_MESSAGE_KEY, "Provider Input Error"))
+        if provider_check.get(self.CONFLICT_KEY, False):
+            warnings.append(provider_check.get(self.ERROR_MESSAGE_KEY, "Provider Input Error"))
         
         # Check for duplicate patient
         patient_check = self.validate_patient(
@@ -25,8 +25,8 @@ class InMemoryDataStore:
             data['patient_first_name'],
             data['patient_last_name']
         )
-        if patient_check.get(InMemoryDataStore.CONFLICT_KEY, False):
-            warnings.append(patient_check.get(InMemoryDataStore.ERROR_MESSAGE_KEY, "Patient Input Error"))
+        if patient_check.get(self.CONFLICT_KEY, False):
+            warnings.append(patient_check.get(self.ERROR_MESSAGE_KEY, "Patient Input Error"))
         
         # Check for duplicate order
         if self.check_duplicate_order(
@@ -51,8 +51,8 @@ class InMemoryDataStore:
             existing_name = existing.get('name', "")
             if existing_name.lower() != normalized_name:
                 return {
-                    InMemoryDataStore.CONFLICT_KEY: True,
-                    InMemoryDataStore.ERROR_MESSAGE_KEY: f'Provider NPI {npi} already exists with name "{existing["name"]}"'
+                    self.CONFLICT_KEY: True,
+                    self.ERROR_MESSAGE_KEY: f'Provider NPI {npi} already exists with name "{existing["name"]}"'
                 }
         
         # Check if this provider name already exists with a different NPI
@@ -60,11 +60,11 @@ class InMemoryDataStore:
             existing_npi = self.provider_names[normalized_name]
             if existing_npi != npi:
                 return {
-                    InMemoryDataStore.CONFLICT_KEY: True,
-                    InMemoryDataStore.ERROR_MESSAGE_KEY: f'Provider "{name}" already exists with NPI {existing_npi}. Same provider cannot have multiple NPIs.'
+                    self.CONFLICT_KEY: True,
+                    self.ERROR_MESSAGE_KEY: f'Provider "{name}" already exists with NPI {existing_npi}. Same provider cannot have multiple NPIs.'
                 }
             
-        return {InMemoryDataStore.CONFLICT_KEY: False}
+        return {self.CONFLICT_KEY: False}
         
     def add_provider(self, npi: str, name: str) -> Dict:
         """Add provider."""
@@ -84,10 +84,10 @@ class InMemoryDataStore:
             if (existing.get('first_name', "").lower() != first_name.lower() or 
                 existing.get('last_name', "").lower() != last_name.lower()):
                 return {
-                    InMemoryDataStore.CONFLICT_KEY: True,
-                    InMemoryDataStore.ERROR_MESSAGE_KEY: f'Patient MRN {mrn} already exists with name "{existing["first_name"]} {existing["last_name"]}"'
+                    self.CONFLICT_KEY: True,
+                    self.ERROR_MESSAGE_KEY: f'Patient MRN {mrn} already exists with name "{existing["first_name"]} {existing["last_name"]}"'
                 }
-        return {InMemoryDataStore.CONFLICT_KEY: False}
+        return {self.CONFLICT_KEY: False}
                 
     def add_patient(self, mrn: str, first_name: str, last_name: str) -> Dict:
         """Add patient."""
@@ -114,3 +114,12 @@ class InMemoryDataStore:
     def export_orders(self) -> List[Dict]:
         """Export all orders."""
         return self.orders
+
+    def get_stats(self) -> Dict:
+        """Get statistics."""
+        
+        return {
+            'total_orders': len(self.orders),
+            'total_patients': len(self.patients),
+            'total_providers': len(self.providers)
+        }

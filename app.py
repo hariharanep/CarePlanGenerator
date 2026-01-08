@@ -4,6 +4,7 @@ import os
 from typing import Dict
 from input_validations import InputHandler
 from in_memory_data_store import InMemoryDataStore
+from postgres_data_store import PostgreSQLDataStore
 from care_plan_generator import CarePlanGenerator
 from csv_generator import CSVGenerator
 
@@ -11,7 +12,8 @@ load_dotenv()
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 input_handler = InputHandler()
-store = InMemoryDataStore()
+#store = InMemoryDataStore() # use this if testing locally and postgresql isn't available
+store = PostgreSQLDataStore() # use this if postgresql is available
 
 @app.route('/')
 def index():
@@ -87,9 +89,6 @@ def submit_order():
     try:
         data = request.json
 
-        # Persist the order data
-        store.add_order(data)
-
         # Persist the patient data
         store.add_patient(
             data['patient_mrn'],
@@ -102,6 +101,9 @@ def submit_order():
             data['provider_npi'],
             data['provider_name']
         )
+
+        # Persist the order data
+        store.add_order(data)
         
         # Return the full order in the response
         return jsonify({
@@ -137,11 +139,7 @@ def export_orders():
 @app.route('/care-plan/stats', methods=['GET'])
 def get_stats():
     """Get statistics about stored data."""
-    response = jsonify({
-        'total_orders': len(store.orders),
-        'total_patients': len(store.patients),
-        'total_providers': len(store.providers)
-    })
+    response = jsonify(store.get_stats())
 
     # Prevent caching of stats
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
